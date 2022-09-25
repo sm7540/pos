@@ -72,13 +72,29 @@ function decrypt(text) {
 log.info('App starting...');
 
 let tray = null;
+
+let topWindow;
 let mainWindow;
-let miniWindow;
+
 const createWindow = () => {
 
     //console.log(isDev);
-
+    childWindow = new BrowserWindow({
+        transparent:true,
+        width: 200,
+        height: 200,
+        // frame: false,
+        titleBarStyle: 'hidden',
+        //resizable: false,
+        webPreferences: {
+            enableRemoteModule: true,
+            /* NODEJS관련 사용시 2개옵션확인 */
+            contextIsolation: true,
+            nodeIntegration: true,            
+        }
+    });
     mainWindow = new BrowserWindow({
+        parent:childWindow,
         width: LOGIN_WIDTH,
         height: LOGIN_HEIGHT,
         //frame: false,
@@ -91,26 +107,14 @@ const createWindow = () => {
             preload: path.join(__dirname, 'preload.js') 
         }
     });
-    miniWindow = new BrowserWindow({
-        width: 100,
-        height: 100,
-        frame: false,
-        //resizable: false,
-        webPreferences: {
-            enableRemoteModule: true,
-            /* NODEJS관련 사용시 2개옵션확인 */
-            contextIsolation: true,
-            nodeIntegration: true,            
-        }
-    });
-    miniWindow.loadFile('./views/miniview.html');
-    
-    miniWindow.on('click', () => {
-		mainWindow.show()
-        window.api.alert("2222");
-	//	win.isVisible() ? win.hide() : win.show()
-	})
+ 
+    // childWindow.on('focus',()=>{
+    //     mainWindow.show();
+    // });
+    childWindow.loadFile('./views/miniview.html');
 
+    childWindow.setPosition(0,0);
+    
     var isLogin = store.get("login","N");
     log.debug("LOGIN FLAG CHECK ",isLogin);
 
@@ -136,6 +140,7 @@ const createWindow = () => {
 
 
     //항상위에
+    childWindow.setAlwaysOnTop(true);
     mainWindow.setAlwaysOnTop(true);
 
     //mainWindow.maximize();

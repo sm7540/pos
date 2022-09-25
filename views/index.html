@@ -75,6 +75,7 @@
     </div>
     <div class="container">
         <div class="row" style="position:relative;width:300px;">
+            <div id="test">테스트</div>
             <div class="">판매금액 : <span id="pos_price" data-price="0" data-idx="0"></span></div>
             <div>적립포인트 : <span id="point" data-point="0"></span></div>
             <div style="position: absolute;top:5px;right:-80%;z-index:998" class="pos_list"><i class="fas fa-arrow-alt-circle-down fa-2x"></i></div>
@@ -149,6 +150,13 @@
         <div id="point_use_wrap">
             
         </div>
+    </div>
+
+    <div id="point_add_modal" style="display:none;">
+        <h2>판매금액</h2>
+        <input type="text">
+        <h2>적립포인트:</h2>
+        <input type="text">
     </div>
 
 
@@ -302,6 +310,12 @@ $(document).ready(async function(){
             });
         }
         
+    })
+    $("#test").click(function(){
+        Fancybox.show([{ src: "#point_add_modal", type: "inline" }],{
+                        dragToClose :false,
+                        hideScrollbar :false
+            });
     })
 
     //비회원버튼
